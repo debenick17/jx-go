@@ -20,13 +20,13 @@ pipeline {
       }
       steps {
         container('go') {
-          dir('/home/jenkins/go/src/github.com/debenick17/jx-go') {
+          dir('/home/jenkins/agent/go/src/github.com/debenick17/jx-go') {
             checkout scm
             sh "make linux"
             sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml"
             sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
           }
-          dir('/home/jenkins/go/src/github.com/debenick17/jx-go/charts/preview') {
+          dir('/home/jenkins/agent/go/src/github.com/debenick17/jx-go/charts/preview') {
             sh "make preview"
             sh "jx preview --app $APP_NAME --dir ../.."
           }
@@ -39,7 +39,7 @@ pipeline {
       }
       steps {
         container('go') {
-          dir('/home/jenkins/go/src/github.com/debenick17/jx-go') {
+          dir('/home/jenkins/agent/go/src/github.com/debenick17/jx-go') {
             checkout scm
 
             // ensure we're not on a detached head
@@ -63,7 +63,7 @@ pipeline {
       }
       steps {
         container('go') {
-          dir('/home/jenkins/go/src/github.com/debenick17/jx-go/charts/jx-go') {
+          dir('/home/jenkins/agent/go/src/github.com/debenick17/jx-go/charts/jx-go') {
             sh "jx step changelog --version v\$(cat ../../VERSION)"
 
             // release the helm chart
